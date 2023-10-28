@@ -17,13 +17,13 @@ public class Main {
         QueryReader read = new QueryReader();
 
         // Perform authentication
-        auth.authenticate();
+        String username=auth.authenticate();
 
         // Read queries from the user
         String queries[] = read.readQueries();
 
         // Initialize the transaction processor
-        BasicProcessor processor = new BasicProcessor(queries);
+        BasicProcessor processor = new BasicProcessor(queries,username);
 
         // The program can continue with further processing as needed.
     }

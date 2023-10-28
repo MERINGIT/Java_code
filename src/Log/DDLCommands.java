@@ -1,5 +1,6 @@
 package Log;
 
+import Commit.DDLCommandHandler;
 import Parser.InsertCommand;
 import Parser.ParserForCreate;
 import Parser.ParserForInsert;
@@ -14,10 +15,11 @@ import java.time.LocalDateTime;
  * The DDLCommands class provides methods for handling DDL (Data Definition Language) statements
  * and logging these operations.
  */
-public class DDLCommands {
+public class DDLCommands   {
     private ParserForCreate cparser = new ParserForCreate();
     private ParserForInsert iparser = new ParserForInsert();
     private SequenceGenerator sequence = new SequenceGenerator();
+    private WritingLogDataToFile write=new WritingLogDataToFile();
 
     /**
      * Handles a CREATE statement and logs the operation in a transaction log.
@@ -26,7 +28,7 @@ public class DDLCommands {
      * @param transactionNumber The unique identifier for the current transaction.
      * @param log              The transaction log where the operation is logged.
      */
-    public void createStatement(String query, int transactionNumber, TransactionLog log) {
+    public void createStatement(String query, int transactionNumber, TransactionLog log,String username) {
         LogRecord record = new LogRecord();
         TableInfo info = cparser.parseCreateCommand(query);
         record.setLogSequenceNumber(sequence.generateLogSequenceNumber());
@@ -35,7 +37,8 @@ public class DDLCommands {
         record.setTimestamp(String.valueOf(LocalDateTime.now()));
         record.setDatabaseObject(info.getTableName());
         record.setColumnname(info.getAttributes());
-        System.out.println(record.toString());
+        record.setUsername(username);
+        write.writeToLog(record.toString());
         log.addLogRecord(record);
     }
 
@@ -46,7 +49,7 @@ public class DDLCommands {
      * @param transactionNumber The unique identifier for the current transaction.
      * @param log              The transaction log where the operation is logged.
      */
-    public void insertStatement(String query, int transactionNumber, TransactionLog log) {
+    public void insertStatement(String query, int transactionNumber, TransactionLog log,String username) {
         LogRecord record = new LogRecord();
         InsertCommand insert = iparser.parseInsertCommand(query);
         String databaseObject = insert.getTableName();
@@ -57,7 +60,8 @@ public class DDLCommands {
         record.setTimestamp(String.valueOf(LocalDateTime.now()));
         record.setDatabaseObject(databaseObject);
         record.setNewValue(newValue);
-        System.out.println(record.toString());
+        record.setUsername(username);
+        write.writeToLog(record.toString());
         log.addLogRecord(record);
     }
 }

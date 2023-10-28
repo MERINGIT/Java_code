@@ -1,2 +1,1 @@
-Table:users;Attributes:id, name, email;row0:1,"jack","jack@dal.ca";row1:2,"mary","mary@dal.ca";row2:2,"mia","mia@dal.ca";
-Table:company;Attributes:id, name, email;row0:1,"john","john@dal.ca";row1:2,"faith","faith@dal.ca";
+

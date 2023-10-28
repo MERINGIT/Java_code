@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * The ReadCredentialsFromCSVForAuthentication class reads user credentials from a CSV file for authentication.
  */
-public class ReadCredentialsFromCSVForAuthentication {
+public class ReadCredentialsFromCSVForAuthentication  implements  UserCredentialsReader{
     /**
      * Reads user credentials from a CSV file.
      *

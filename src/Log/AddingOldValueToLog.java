@@ -19,7 +19,7 @@ public class AddingOldValueToLog {
      */
     public String addOldValue(String tablename, String[] attributes, String[] condition) {
         try {
-            String result = deleteRowsInCSV(tablename, attributes, condition);
+            String result = updateRowsInCSV(tablename, attributes, condition);
             System.out.println(result);
             return result;
         } catch (IOException e) {
@@ -37,7 +37,7 @@ public class AddingOldValueToLog {
      * @return The old value from the log, or null if not found.
      * @throws IOException If there is an input/output exception during the operation.
      */
-    public String deleteRowsInCSV(String tableName, String[] attributes, String[] condition) throws IOException {
+    public String updateRowsInCSV(String tableName, String[] attributes, String[] condition) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader("database.csv"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -73,8 +73,10 @@ public class AddingOldValueToLog {
         String attribute = condition[0].split("=")[0];
         String value = condition[0].split("=")[1];
         for (int i = 0; i < attributeNames.length; i++) {
-            if (attributeNames[i].trim().equals(attribute) && i < rowValues.length && rowValues[i].trim().equals(value)) {
-                return rowValues[i];
+            if (attributeNames[i].trim().equals(attribute) && i < rowValues.length && rowValues[i].trim().equals(value))
+            {
+                System.out.println(rowValues[i]);
+                return value;
             }
         }
         return null;

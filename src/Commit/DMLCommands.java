@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * The DMLCommands class provides methods for handling SQL Data Manipulation Language (DML) statements.
  */
-public class DMLCommands {
+public class DMLCommands implements  DMLCommandHandler{
     LogRecord record;
     SequenceGenerator sequence = new SequenceGenerator();
     ParserForSelect sparser = new ParserForSelect();

@@ -17,36 +17,38 @@ public class BasicProcessor {
         Random random=new Random();
         DDLCommands ddl=new DDLCommands();
         DMLCommands dml=new DMLCommands();
-        int transactionNumber=0;
+        private int transactionNumber=0;
         TransactionLog log=new TransactionLog();
         TCLCommands tcl=new TCLCommands();
+        String userName="";
 
 
-    public BasicProcessor(String[] queries) throws IOException {
+    public BasicProcessor(String[] queries,String username) throws IOException {
         transactionNumber = random.nextInt(100);
-        QueryLogProcessing(queries,transactionNumber);
+        this.userName=username;
+        QueryLogProcessing(queries,transactionNumber,username);
     }
 
 
-    public void QueryLogProcessing(String query[],int tid) throws IOException {
+    public void QueryLogProcessing(String query[],int tid,String username) throws IOException {
             for (String statement : query) {
                 if (statement.startsWith("insert")) {
-                    ddl.insertStatement(statement,transactionNumber,log);
+                    ddl.insertStatement(statement,transactionNumber,log,username);
                 }
                 else if (statement.startsWith("create")) {
-                    ddl.createStatement(statement,transactionNumber,log);
+                    ddl.createStatement(statement,transactionNumber,log,username);
 
                 }
                 else if (statement.startsWith("select")) {
-                    dml.selectStatement(statement,transactionNumber,log);
+                    dml.selectStatement(statement,transactionNumber,log,username);
 
                 }
                 else if (statement.startsWith("delete")) {
-                    dml.deleteStatement(statement,transactionNumber,log);
+                    dml.deleteStatement(statement,transactionNumber,log,username);
 
                 }
                 else if (statement.startsWith("update")) {
-                    dml.updateStatement(statement,transactionNumber,log);
+                    dml.updateStatement(statement,transactionNumber,log,username);
 
                 }
                 else if (statement.startsWith("rollback")) {
@@ -57,10 +59,7 @@ public class BasicProcessor {
                      log.commit(query,transactionNumber,log);
 
                 }
-                else if (statement.startsWith("begin transaction")) {
-
-
-                }
+                else if (statement.startsWith("begin transaction")) {}
                 else  {
                    System.out.println("Invalid statement");
                    exit(0);

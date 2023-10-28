@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * The DDLCommands class handles SQL Data Definition Language (DDL) statements for creating and inserting data.
  */
-public class DDLCommands {
+public class DDLCommands implements DDLCommandHandler {
     private ParserForCreate cparser = new ParserForCreate();
     private ParserForInsert iparser = new ParserForInsert();
     private SequenceGenerator sequence = new SequenceGenerator();

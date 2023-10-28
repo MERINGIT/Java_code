@@ -15,7 +15,7 @@ public class BasicAuthentication {
     /**
      * Initiates the authentication process.
      */
-    public void authenticate() {
+    public String authenticate() {
         List<UserDetails> credentials = credentialsReader.readCredentials(csvFile);
         Scanner scanner = new Scanner(System.in);
         int maxAttempts = 3;
@@ -33,7 +33,7 @@ public class BasicAuthentication {
 
             if (isValidCredentials(username, password, captcha, credentials)) {
                 System.out.println("Authentication successful!");
-                return;
+                return username;
             } else {
                 System.out.println("Authentication failed. Invalid username, password, or captcha.");
                 count++;
@@ -41,6 +41,7 @@ public class BasicAuthentication {
         }
         System.out.println("You attempted " + maxAttempts + " times. You can't log in now.");
         exit(0);
+        return null;
     }
 
     /**

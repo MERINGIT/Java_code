@@ -1,5 +1,6 @@
 package Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,6 +16,16 @@ public class LogRecord {
         private String newValue;
         private String[] columnname = null;
         private List<String> rowNumber = null;
+
+        public String getUsername() {
+                return username;
+        }
+
+        public void setUsername(String username) {
+                this.username = username;
+        }
+
+        private String username;
 
         public int getLogSequenceNumber() {
                 return logSequenceNumber;
@@ -88,16 +99,23 @@ public class LogRecord {
                 this.rowNumber = rowNumber;
         }
 
+
         @Override
         public String toString() {
-                return "LogRecord{" +
-                        "logSequenceNumber=" + logSequenceNumber +
-                        ", transactionId=" + transactionId +
-                        ", operationType='" + operationType + '\'' +
-                        ", timestamp='" + timestamp + '\'' +
-                        ", databaseObject='" + databaseObject + '\'' +
-                        ", oldValue='" + oldValue + '\'' +
-                        ", newValue='" + newValue + '\'' +
+                return "LogRecord:{" +
+                        "logSequenceNumber=" + logSequenceNumber +"|"+
+                        ", transactionId=" + transactionId +"|"+
+                        ", username='" + username + '\'' +"|"+
+                        ", operationType='" + operationType +"|"+
+                        ", timestamp='" + timestamp +"|"+
+                        ", databaseObject='" + databaseObject +"|"+
+                        ", oldValue='" + oldValue +"|"+
+                        ", newValue='" + newValue +"|"+
+                        ", columnname=" + Arrays.toString(columnname) +"|"+
+                        ", rowNumber=" + rowNumber +"|"+
                         '}';
         }
+
+
+
 }

@@ -23,6 +23,7 @@ public class DMLCommands {
     AddingRowsToLog add = new AddingRowsToLog();
     AddingOldValueToLog update = new AddingOldValueToLog();
     SelectOperation selectOperation = new SelectOperation();
+    WritingLogDataToFile write=new WritingLogDataToFile();
 
     /**
      * Handles a SELECT statement and logs the operation in a transaction log.
@@ -31,7 +32,7 @@ public class DMLCommands {
      * @param transactionNumber The unique identifier for the current transaction.
      * @param log              The transaction log where the operation is logged.
      */
-    public void selectStatement(String query, int transactionNumber, TransactionLog log) {
+    public void selectStatement(String query, int transactionNumber, TransactionLog log,String username) {
         record = new LogRecord();
         TableInfo info = sparser.parseSelectCommand(query);
         record.setLogSequenceNumber(sequence.generateLogSequenceNumber());
@@ -40,8 +41,9 @@ public class DMLCommands {
         record.setTimestamp(String.valueOf(LocalDateTime.now()));
         record.setDatabaseObject(info.getTableName());
         record.setColumnname(info.getAttributes());
+        record.setUsername(username);
+        write.writeToLog(record.toString());
         log.addLogRecord(record);
-        System.out.println(record.toString());
         selectOperation.selectOperation(info.getTableName(), info.getAttributes(), info.getConditions());
     }
 
@@ -52,7 +54,7 @@ public class DMLCommands {
      * @param transactionNumber The unique identifier for the current transaction.
      * @param log              The transaction log where the operation is logged.
      */
-    public void deleteStatement(String query, int transactionNumber, TransactionLog log) {
+    public void deleteStatement(String query, int transactionNumber, TransactionLog log,String username) {
         record = new LogRecord();
         TableInfo info = dparser.parseDeleteCommand(query);
         record.setLogSequenceNumber(sequence.generateLogSequenceNumber());
@@ -63,7 +65,8 @@ public class DMLCommands {
         record.setColumnname(info.getAttributes());
         List<String> result = add.addRowsOnLog(info.getTableName(), info.getAttributes(), info.getConditions());
         record.setRowNumber(result);
-        System.out.println("success");
+        record.setUsername(username);
+        write.writeToLog(record.toString());
         log.addLogRecord(record);
     }
 
@@ -74,7 +77,7 @@ public class DMLCommands {
      * @param transactionNumber The unique identifier for the current transaction.
      * @param log              The transaction log where the operation is logged.
      */
-    public void updateStatement(String query, int transactionNumber, TransactionLog log) {
+    public void updateStatement(String query, int transactionNumber, TransactionLog log,String username) {
         record = new LogRecord();
         TableInfo info = uparser.parseUpdateStatement(query);
         record.setLogSequenceNumber(sequence.generateLogSequenceNumber());
@@ -86,7 +89,8 @@ public class DMLCommands {
         record.setNewValue(info.getValues());
         record.setColumnname(info.getAttributes());
         record.setOldValue(update.addOldValue(info.getTableName(), info.getAttributes(), info.getConditions()));
-        System.out.println("success");
+        record.setUsername(username);
+        write.writeToLog(record.toString());
         log.addLogRecord(record);
     }
 }
